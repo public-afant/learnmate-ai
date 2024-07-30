@@ -16,7 +16,7 @@ const Layout = ({ children, setIsLogined, setIsNewChat, setSelRoomId }) => {
               setSelRoomId("");
             }}
           >
-            <Logo src="/image/Logo3.png" />
+            <Logo src="image/Logo3.png" />
             <LogoTitle>LearnMate AI</LogoTitle>
             <BetaTitle>Beta</BetaTitle>
           </LogoContainer>

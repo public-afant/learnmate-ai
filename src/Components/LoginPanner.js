@@ -45,7 +45,7 @@ const LoginPanner = ({ setIsLogined }) => {
       {contextHolder}
 
       <Container>
-        <LogoImage src="/image/Logo1.png" alt="" />
+        <LogoImage src="image/Logo1.png" alt="" />
         <Input.Password
           placeholder="Authentication Code"
           prefix={<UserOutlined />}
