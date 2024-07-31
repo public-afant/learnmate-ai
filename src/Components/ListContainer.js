@@ -11,16 +11,16 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
   const setStateTag = (value) => {
     let data = { name: "", color: "" };
     if (value === 1) {
-      data.name = "관심사 탐색";
+      data.name = "Interest Set";
       data.color = "red";
     } else if (value === 2) {
-      data.name = "계획서 작성";
+      data.name = "Planning";
       data.color = "orange";
     } else if (value === 3) {
-      data.name = "학습 중";
+      data.name = "Learning";
       data.color = "green";
     } else {
-      data.name = "학습 종료";
+      data.name = "End";
       data.color = "gray";
     }
 
@@ -81,12 +81,6 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
 };
 
 export default ListContainer;
-
-const data = [
-  { date: "2024-07-12", id: "1", state: "학습 중" },
-  { date: "2024-07-13", id: "2", state: "계획 중" },
-  { date: "2024-07-14", id: "3", state: "학습 종료" },
-];
 
 // const data1 = [];
 
