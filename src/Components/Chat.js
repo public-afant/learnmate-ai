@@ -1,12 +1,17 @@
-import { Button, Divider, Input, Spin } from "antd";
+import { Button, Divider, Input, Spin, message, Popconfirm } from "antd";
 import styled from "styled-components";
 import { SendOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import supabase from "../supabase";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+// import ReactMarkdown from "react-markdown";
+// import remarkGfm from "remark-gfm";
 import GPTMsg from "./GPTMsg";
+
+const confirm = (e) => {
+  console.log(e);
+  message.success("Click on Yes");
+};
 
 const Chat = ({ roomId, action }) => {
   // console.log("Chat : ", roomId);
@@ -210,13 +215,22 @@ const Chat = ({ roomId, action }) => {
           style={{ marginLeft: 10, width: 50 }}
           onClick={handleMessage}
         />
-        <Button
-          type="primary"
-          style={{ marginLeft: 10 }}
-          onClick={handleNextLevel}
+
+        <Popconfirm
+          title="Caution"
+          description="I can't come back to the next one."
+          onConfirm={handleNextLevel}
+          okText="Yes"
+          cancelText="Cancle"
         >
-          Next
-        </Button>
+          <Button
+            type="primary"
+            style={{ marginLeft: 10 }}
+            // onClick={handleNextLevel}
+          >
+            Next
+          </Button>
+        </Popconfirm>
       </InputContainer>
     </Container>
   );

@@ -56,7 +56,7 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
                 {item.title}
               </ItemTitle>
               <StateTitle>
-                <div className="plan">학습계획서</div>
+                <div className="plan">Statement of Purpose</div>
                 <Tag className="tag" color={setStateTag(item.state).color}>
                   {setStateTag(item.state).name}
                 </Tag>
