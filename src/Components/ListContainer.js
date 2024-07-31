@@ -4,10 +4,14 @@ import { PlusOutlined } from "@ant-design/icons";
 import supabase from "../supabase";
 import { useEffect, useState } from "react";
 import Loading from "./Loading";
+import SOPModal from "./SOPModal";
 
 const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
   const [roomList, setRoomList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isModal, setIsModal] = useState(false);
+  const [plan, setPlan] = useState({});
+
   const setStateTag = (value) => {
     let data = { name: "", color: "" };
     if (value === 1) {
@@ -52,11 +56,27 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
         renderItem={(item, index) => {
           return (
             <Item key={index}>
-              <ItemTitle onClick={() => setSelRoomId(item.id)}>
+              <ItemTitle
+                onClick={() => {
+                  setSelRoomId(item.id);
+                }}
+              >
                 {item.title}
               </ItemTitle>
               <StateTitle>
-                <div className="plan">Statement of Purpose</div>
+                {Object.keys(item.plan).length !== 0 && (
+                  <>
+                    <div
+                      className="plan"
+                      onClick={() => {
+                        setIsModal(true);
+                        setPlan(item.plan);
+                      }}
+                    >
+                      Statement of Purpose
+                    </div>
+                  </>
+                )}
                 <Tag className="tag" color={setStateTag(item.state).color}>
                   {setStateTag(item.state).name}
                 </Tag>
@@ -76,6 +96,8 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
           }}
         />
       </AddContainer>
+
+      {isModal && <SOPModal setIsModal={setIsModal} json={plan} />}
     </>
   );
 };

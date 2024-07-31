@@ -2,8 +2,6 @@ import { Button, Table } from "antd";
 import styled from "styled-components";
 
 const SOPModal = ({ json, setIsModal }) => {
-  console.log(json);
-
   const date = new Date();
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -40,7 +38,7 @@ const SOPModal = ({ json, setIsModal }) => {
           <Section>
             <div className="info"># Learner : {user.name}</div>
             <div className="info">
-              # Date of creation : {!json.date && today}
+              # Date of creation : {json.date === undefined ? today : json.date}
             </div>
           </Section>
 
