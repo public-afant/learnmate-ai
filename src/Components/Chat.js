@@ -4,6 +4,9 @@ import { SendOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import supabase from "../supabase";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import GPTMsg from "./GPTMsg";
 
 const Chat = ({ roomId, action }) => {
   // console.log("Chat : ", roomId);
@@ -14,6 +17,8 @@ const Chat = ({ roomId, action }) => {
   const [threadId, setThreadId] = useState("");
   const [state, setState] = useState(1);
   const [roomInfo, setRoomInfo] = useState({});
+
+  const [planJson, setPlanJson] = useState({});
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -77,7 +82,7 @@ const Chat = ({ roomId, action }) => {
 
       setMsgLoading(false);
 
-      console.log(data);
+      // console.log(data);
 
       insertMessage(data.assistant, "assistant");
     } catch (e) {
@@ -98,7 +103,7 @@ const Chat = ({ roomId, action }) => {
           },
         ])
         .select();
-      console.log(data, role);
+      // console.log(data, role);
 
       setChats((prev) => [
         ...prev,
@@ -139,6 +144,33 @@ const Chat = ({ roomId, action }) => {
     getAssistantMSG(JSON.stringify(chats), "", 2);
   };
 
+  const messageFilterFn = (text) => {
+    // JSON 부분 추출하기
+    const jsonStart = text.indexOf("```json");
+    const jsonEnd = text.indexOf("```", jsonStart + 6);
+
+    if (jsonStart === -1) return { message: text };
+
+    // JSON 문자열 추출
+    const jsonString = text.substring(jsonStart + 7, jsonEnd).trim();
+
+    // 나머지 텍스트 추출
+    const textOnly =
+      text.substring(0, jsonStart).trim() +
+      "\n" +
+      text.substring(jsonEnd + 3).trim();
+
+    // JSON 문자열을 객체로 파싱
+    let jsonData;
+    try {
+      jsonData = JSON.parse(jsonString);
+    } catch (e) {
+      console.error("JSON 파싱 오류:", e);
+    }
+
+    return { message: textOnly, json: jsonData };
+  };
+
   return (
     <Container>
       <ChatContainer ref={messageEndRef}>
@@ -152,7 +184,12 @@ const Chat = ({ roomId, action }) => {
           else if (item.role === "assistant")
             return (
               <GptMessage key={index}>
-                <Message className="gpt">{item.message}</Message>
+                <Message className="gpt">
+                  <GPTMsg
+                    message={messageFilterFn(item.message)}
+                    setPlanJson={setPlanJson}
+                  />
+                </Message>
               </GptMessage>
             );
         })}
@@ -178,7 +215,7 @@ const Chat = ({ roomId, action }) => {
           style={{ marginLeft: 10 }}
           onClick={handleNextLevel}
         >
-          다음으로
+          Next
         </Button>
       </InputContainer>
     </Container>
@@ -236,3 +273,29 @@ const Message = styled.div`
   padding: 20px;
   margin-bottom: 20px;
 `;
+
+let a = {
+  project_name: "",
+  project_description: "",
+  recommended_learning_materials: [],
+  learning_plan: [
+    {
+      week: 1,
+      inquiry_question: "",
+      reference_materials: [],
+      learning_activity: "",
+    },
+    {
+      week: 2,
+      inquiry_question: "",
+      reference_materials: [],
+      learning_activity: "",
+    },
+    {
+      week: 3,
+      inquiry_question: "",
+      reference_materials: [],
+      learning_activity: "",
+    },
+  ],
+};
