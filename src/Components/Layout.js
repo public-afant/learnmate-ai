@@ -6,6 +6,9 @@ const Layout = ({ children, setIsLogined, setIsNewChat, setSelRoomId }) => {
     localStorage.removeItem("user");
     setIsLogined(false);
   };
+
+  const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <Body>
       <Container>
@@ -21,7 +24,9 @@ const Layout = ({ children, setIsLogined, setIsNewChat, setSelRoomId }) => {
             <BetaTitle>Beta</BetaTitle>
           </LogoContainer>
           <SideContainer>
-            <WelcomeTitle>Welcome! TAEJAE </WelcomeTitle>
+            <WelcomeTitle>
+              Welcome! {user.name} {`:)`}{" "}
+            </WelcomeTitle>
             <Button type="primary" size="small" onClick={handleLogOut}>
               Logout
             </Button>
