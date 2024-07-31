@@ -8,6 +8,8 @@ import supabase from "../supabase";
 // import remarkGfm from "remark-gfm";
 import GPTMsg from "./GPTMsg";
 
+const { TextArea } = Input;
+
 const confirm = (e) => {
   console.log(e);
   message.success("Click on Yes");
@@ -203,11 +205,18 @@ const Chat = ({ roomId, action }) => {
       </ChatContainer>
       <Divider />
       <InputContainer>
-        <Input
+        {/* <Input
           placeholder="send message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={changeInputValueHandler}
+        /> */}
+        <TextArea
+          placeholder="send message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={changeInputValueHandler}
+          autoSize={{ minRows: 1, maxRows: 4 }}
         />
         <Button
           type="primary"
@@ -223,11 +232,7 @@ const Chat = ({ roomId, action }) => {
           okText="Yes"
           cancelText="Cancle"
         >
-          <Button
-            type="primary"
-            style={{ marginLeft: 10 }}
-            // onClick={handleNextLevel}
-          >
+          <Button type="primary" style={{ marginLeft: 10 }}>
             Next
           </Button>
         </Popconfirm>
@@ -259,6 +264,7 @@ const ChatContainer = styled.div`
 const InputContainer = styled.div`
   flex-direction: row;
   display: flex;
+  align-items: end;
 `;
 
 const UserMessage = styled.div`

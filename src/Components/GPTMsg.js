@@ -1,27 +1,33 @@
 import { Button } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import SOPModal from "./SOPModal";
 
 const GPTMsg = ({ message: obj, setPlanJson }) => {
+  const [isModal, setIsModal] = useState(false);
   //   console.log(obj.json);
   useEffect(() => {
     if (obj.json) setPlanJson(obj.json);
   }, []);
 
   const handleButton = (json) => {
-    console.log(json);
+    // console.log(json);
+    setIsModal(true);
   };
   return (
     <>
       <div>{obj.message}</div>
       {obj.json !== undefined && (
-        <PlanButton
-          type="primary"
-          size={"small"}
-          onClick={() => handleButton(obj.json)}
-        >
-          View Plan
-        </PlanButton>
+        <>
+          <PlanButton
+            type="primary"
+            size={"small"}
+            onClick={() => handleButton(obj.json)}
+          >
+            View Plan
+          </PlanButton>
+          {isModal && <SOPModal json={obj.json} setIsModal={setIsModal} />}
+        </>
       )}
     </>
   );
