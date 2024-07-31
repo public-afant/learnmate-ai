@@ -45,7 +45,7 @@ const LoginPanner = ({ setIsLogined }) => {
       {contextHolder}
 
       <Container>
-        <LogoImage src="image/Logo1.png" alt="" />
+        <LogoImage src={`${process.env.PUBLIC_URL}/image/Logo1.png`} alt="" />
         <Input.Password
           placeholder="Authentication Code"
           prefix={<UserOutlined />}

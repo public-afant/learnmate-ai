@@ -51,13 +51,14 @@ const SOPModal = ({ json, setIsModal }) => {
 
           <Section>
             <div className="title"># Recommended Learning Materials</div>
-            {json.recommended_learning_materials.map((item, idx) => {
-              return (
-                <div className="sub-title" key={idx}>
-                  - {item}
-                </div>
-              );
-            })}
+            {json.recommended_learning_materials.length !== 0 &&
+              json.recommended_learning_materials.map((item, idx) => {
+                return (
+                  <div className="sub-title" key={idx}>
+                    - {item}
+                  </div>
+                );
+              })}
           </Section>
 
           <Section>

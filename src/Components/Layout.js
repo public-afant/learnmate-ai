@@ -19,13 +19,13 @@ const Layout = ({ children, setIsLogined, setIsNewChat, setSelRoomId }) => {
               setSelRoomId("");
             }}
           >
-            <Logo src="image/Logo3.png" />
+            <Logo src={`${process.env.PUBLIC_URL}/image/Logo3.png`} />
             <LogoTitle>LearnMate AI</LogoTitle>
             <BetaTitle>Beta</BetaTitle>
           </LogoContainer>
           <SideContainer>
             <WelcomeTitle>
-              Welcome! {user.name} {`:)`}{" "}
+              Welcome! {user.name} {`:)`}
             </WelcomeTitle>
             <Button type="primary" size="small" onClick={handleLogOut}>
               Logout
