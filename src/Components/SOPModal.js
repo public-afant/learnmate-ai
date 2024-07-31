@@ -1,7 +1,7 @@
 import { Button, Table } from "antd";
 import styled from "styled-components";
 
-const SOPModal = ({ json, setIsModal }) => {
+const SOPModal = ({ json, setIsModal, type }) => {
   const date = new Date();
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -15,13 +15,19 @@ const SOPModal = ({ json, setIsModal }) => {
       <Container>
         <Nav>
           <Button onClick={() => setIsModal(false)}>Exit</Button>
-          {/* <Button
-            type="primary"
-            style={{ marginLeft: 10, width: 100 }}
-            onClick={() => setIsModal(false)}
-          >
-            Save
-          </Button> */}
+          {type === "view" ? (
+            <Button type="primary" style={{ marginLeft: 10, width: 100 }}>
+              Export PDF
+            </Button>
+          ) : (
+            <Button
+              type="primary"
+              style={{ marginLeft: 10, width: 100 }}
+              onClick={() => setIsModal(false)}
+            >
+              Save
+            </Button>
+          )}
         </Nav>
         <Page>
           <Section style={{ textAlign: "right" }}>
@@ -38,7 +44,7 @@ const SOPModal = ({ json, setIsModal }) => {
           <Section>
             <div className="info"># Learner : {user.name}</div>
             <div className="info">
-              # Date of creation : {json.date === undefined ? today : json.date}
+              # Date of creation : {type === "view" ? json.date : today}
             </div>
           </Section>
 

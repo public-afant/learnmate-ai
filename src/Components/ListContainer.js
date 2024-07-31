@@ -97,7 +97,9 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
         />
       </AddContainer>
 
-      {isModal && <SOPModal setIsModal={setIsModal} json={plan} />}
+      {isModal && (
+        <SOPModal setIsModal={setIsModal} json={plan} type={"view"} />
+      )}
     </>
   );
 };
