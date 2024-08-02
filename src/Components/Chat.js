@@ -128,14 +128,14 @@ const Chat = ({ roomId, action }) => {
 
       //Assistant Chat Process
       getAssistantMSG(message, threadId, state);
-
       setMessage("");
     }
   };
 
   const changeInputValueHandler = (e) => {
     if (e.key === "Enter" && e.nativeEvent.isComposing === false) {
-      handleMessage();
+      e.preventDefault();
+      msgLoading === false && handleMessage();
     }
   };
 
@@ -223,6 +223,7 @@ const Chat = ({ roomId, action }) => {
           icon={<SendOutlined />}
           style={{ marginLeft: 10, width: 50 }}
           onClick={handleMessage}
+          disabled={msgLoading}
         />
 
         <Popconfirm
