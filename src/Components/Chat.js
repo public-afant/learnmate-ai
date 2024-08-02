@@ -227,7 +227,7 @@ const Chat = ({ roomId, action }) => {
 
         <Popconfirm
           title="Caution"
-          description="I can't come back to the next one."
+          description="Once you proceed, you will not be able to return."
           onConfirm={handleNextLevel}
           okText="Yes"
           cancelText="Cancle"

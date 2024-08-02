@@ -11,8 +11,8 @@ const FirstStep = ({ setIsNewChat }) => {
     <Container>
       {isStart === false ? (
         <Preview
-          title="Interests Study Room"
-          subTitle={`Please enter a study room name.`}
+          title="Interest Discovery Room"
+          subTitle={`Please enter a room name.`}
           setIsStart={setIsStart}
           setRoomId={setRoomId}
         />
