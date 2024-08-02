@@ -1,7 +1,19 @@
-import { Button, Table } from "antd";
+import { Button, Table, Popconfirm } from "antd";
 import styled from "styled-components";
+import supabase from "../supabase";
+import Loading from "./Loading";
+import { useState } from "react";
 
-const SOPModal = ({ json, setIsModal, type }) => {
+const SOPModal = ({
+  json,
+  setIsModal,
+  type,
+  roomId,
+  setIsNewChat,
+  setSelRoomId,
+}) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const date = new Date();
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -9,6 +21,20 @@ const SOPModal = ({ json, setIsModal, type }) => {
   const today = `${year}-${month}-${day}`;
 
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleSave = async () => {
+    setIsLoading(true);
+    await supabase
+      .from("rooms")
+      .update({ state: 3, plan: { ...json, date: today } })
+      .eq("id", roomId)
+      .select();
+
+    setIsModal(false);
+    setIsLoading(false);
+    setIsNewChat(false);
+    setSelRoomId("");
+  };
 
   return (
     <Body>
@@ -20,13 +46,17 @@ const SOPModal = ({ json, setIsModal, type }) => {
               Export PDF
             </Button>
           ) : (
-            <Button
-              type="primary"
-              style={{ marginLeft: 10, width: 100 }}
-              onClick={() => setIsModal(false)}
+            <Popconfirm
+              title="Save the Statement of Purpose"
+              description="Once you proceed, you will not be able to return."
+              onConfirm={handleSave}
+              okText="Yes"
+              cancelText="No"
             >
-              Save
-            </Button>
+              <Button type="primary" style={{ marginLeft: 10, width: 120 }}>
+                Save & Next
+              </Button>
+            </Popconfirm>
           )}
         </Nav>
         <Page>
@@ -75,6 +105,7 @@ const SOPModal = ({ json, setIsModal, type }) => {
           </Section>
         </Page>
       </Container>
+      {isLoading && <Loading />}
     </Body>
   );
 };

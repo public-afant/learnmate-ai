@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, List, Tag } from "antd";
+import { Button, List, message, Tag, Popconfirm } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import supabase from "../supabase";
 import { useEffect, useState } from "react";
@@ -11,6 +11,8 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isModal, setIsModal] = useState(false);
   const [plan, setPlan] = useState({});
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isEdit, setIsEdit] = useState(false);
 
   const setStateTag = (value) => {
     let data = { name: "", color: "" };
@@ -21,6 +23,9 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
       data.name = "Planning";
       data.color = "orange";
     } else if (value === 3) {
+      data.name = "Waiting";
+      data.color = "purple";
+    } else if (value === 4) {
       data.name = "Learning";
       data.color = "green";
     } else {
@@ -44,21 +49,60 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
     setIsLoading(false);
   };
 
+  const handleTitle = (item) => {
+    setSelRoomId(item.id);
+  };
+
+  const handleDeleteItem = async (item) => {
+    // setIsLoading(true);
+    const response = await supabase.from("rooms").delete().eq("id", item.id);
+    getList();
+    console.log(response);
+    // setIsLoading(false);
+  };
+
   useEffect(() => {
     getList();
   }, []);
 
   return (
     <>
+      {contextHolder}
       {isLoading && <Loading />}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "end",
+          width: "100%",
+        }}
+      >
+        <Button
+          type="link"
+          size="small"
+          danger={isEdit}
+          onClick={() => setIsEdit(!isEdit)}
+          style={{
+            color: "#512d83",
+          }}
+        >
+          {!isEdit ? "Edit" : "Cancel"}
+        </Button>
+      </div>
       <List
         dataSource={roomList}
         renderItem={(item, index) => {
           return (
-            <Item key={index}>
+            <Item key={index} style={{ height: 50 }}>
               <ItemTitle
                 onClick={() => {
-                  setSelRoomId(item.id);
+                  if (item.state === 3) {
+                    messageApi.open({
+                      type: "warning",
+                      content: "It's not the study period yet. Please wait.",
+                    });
+                    return;
+                  }
+                  handleTitle(item);
                 }}
               >
                 {item.title}
@@ -80,6 +124,25 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
                 <Tag className="tag" color={setStateTag(item.state).color}>
                   {setStateTag(item.state).name}
                 </Tag>
+                {isEdit && (
+                  <Popconfirm
+                    title="Delete the room."
+                    description="Are you sure to delete this room?"
+                    onConfirm={() => handleDeleteItem(item)}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Button
+                      className="delete"
+                      type="text"
+                      danger
+                      size="small"
+                      style={{ fontSize: 12 }}
+                    >
+                      Delete
+                    </Button>
+                  </Popconfirm>
+                )}
               </StateTitle>
             </Item>
           );

@@ -23,7 +23,12 @@ const MainPanner = ({ setIsLogined }) => {
               setSelRoomId={setSelRoomId}
             />
           ) : (
-            <Chat roomId={selRoomId} action={true} />
+            <Chat
+              roomId={selRoomId}
+              action={true}
+              setIsNewChat={setIsNewChat}
+              setSelRoomId={setSelRoomId}
+            />
           )}
         </>
       ) : (

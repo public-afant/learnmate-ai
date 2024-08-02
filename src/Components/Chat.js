@@ -15,7 +15,7 @@ const confirm = (e) => {
   message.success("Click on Yes");
 };
 
-const Chat = ({ roomId, action }) => {
+const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
   // console.log("Chat : ", roomId);
   const messageEndRef = useRef();
   const [message, setMessage] = useState("");
@@ -195,6 +195,9 @@ const Chat = ({ roomId, action }) => {
                   <GPTMsg
                     message={messageFilterFn(item.message)}
                     setPlanJson={setPlanJson}
+                    roomId={roomId}
+                    setIsNewChat={setIsNewChat}
+                    setSelRoomId={setSelRoomId}
                   />
                 </Message>
               </GptMessage>

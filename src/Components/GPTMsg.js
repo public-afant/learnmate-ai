@@ -3,7 +3,13 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SOPModal from "./SOPModal";
 
-const GPTMsg = ({ message: obj, setPlanJson }) => {
+const GPTMsg = ({
+  message: obj,
+  setPlanJson,
+  roomId,
+  setIsNewChat,
+  setSelRoomId,
+}) => {
   const [isModal, setIsModal] = useState(false);
   //   console.log(obj.json);
   useEffect(() => {
@@ -26,7 +32,15 @@ const GPTMsg = ({ message: obj, setPlanJson }) => {
           >
             View Plan
           </PlanButton>
-          {isModal && <SOPModal json={obj.json} setIsModal={setIsModal} />}
+          {isModal && (
+            <SOPModal
+              json={obj.json}
+              setIsModal={setIsModal}
+              roomId={roomId}
+              setIsNewChat={setIsNewChat}
+              setSelRoomId={setSelRoomId}
+            />
+          )}
         </>
       )}
     </>
