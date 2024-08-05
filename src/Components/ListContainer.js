@@ -57,7 +57,7 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
     // setIsLoading(true);
     const response = await supabase.from("rooms").delete().eq("id", item.id);
     getList();
-    console.log(response);
+    // console.log(response);
     // setIsLoading(false);
   };
 

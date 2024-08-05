@@ -293,8 +293,8 @@ const GptMessage = styled.div`
 
 const Message = styled.div`
   white-space: pre-line;
-  font-size: 14px;
-  padding: 20px;
+  font-size: 13px;
+  padding: 15px 20px;
   margin-bottom: 20px;
 `;
 
