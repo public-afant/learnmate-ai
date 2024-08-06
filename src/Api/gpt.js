@@ -40,7 +40,7 @@ export const CallGPT = async ({ prompt }) => {
 
   const message = result.choices[0].message.content;
 
-  console.log(message);
+  // console.log(message);
 
   return message;
 };
