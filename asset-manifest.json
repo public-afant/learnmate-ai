@@ -1,17 +1,21 @@
 {
   "files": {
     "main.css": "/learnmate-ai/static/css/main.93790945.css",
-    "main.js": "/learnmate-ai/static/js/main.cb785e9d.js",
-    "static/js/198.cd51d478.chunk.js": "/learnmate-ai/static/js/198.cd51d478.chunk.js",
-    "static/js/453.e92e93e7.chunk.js": "/learnmate-ai/static/js/453.e92e93e7.chunk.js",
+    "main.js": "/learnmate-ai/static/js/main.b4594b07.js",
+    "static/js/198.108f2d69.chunk.js": "/learnmate-ai/static/js/198.108f2d69.chunk.js",
+    "static/js/213.3007bf69.chunk.js": "/learnmate-ai/static/js/213.3007bf69.chunk.js",
+    "static/js/667.9d0d7b64.chunk.js": "/learnmate-ai/static/js/667.9d0d7b64.chunk.js",
+    "static/js/453.4333e22d.chunk.js": "/learnmate-ai/static/js/453.4333e22d.chunk.js",
     "index.html": "/learnmate-ai/index.html",
     "main.93790945.css.map": "/learnmate-ai/static/css/main.93790945.css.map",
-    "main.cb785e9d.js.map": "/learnmate-ai/static/js/main.cb785e9d.js.map",
-    "198.cd51d478.chunk.js.map": "/learnmate-ai/static/js/198.cd51d478.chunk.js.map",
-    "453.e92e93e7.chunk.js.map": "/learnmate-ai/static/js/453.e92e93e7.chunk.js.map"
+    "main.b4594b07.js.map": "/learnmate-ai/static/js/main.b4594b07.js.map",
+    "198.108f2d69.chunk.js.map": "/learnmate-ai/static/js/198.108f2d69.chunk.js.map",
+    "213.3007bf69.chunk.js.map": "/learnmate-ai/static/js/213.3007bf69.chunk.js.map",
+    "667.9d0d7b64.chunk.js.map": "/learnmate-ai/static/js/667.9d0d7b64.chunk.js.map",
+    "453.4333e22d.chunk.js.map": "/learnmate-ai/static/js/453.4333e22d.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.93790945.css",
-    "static/js/main.cb785e9d.js"
+    "static/js/main.b4594b07.js"
   ]
 }
