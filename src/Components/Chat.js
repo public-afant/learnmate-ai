@@ -10,11 +10,6 @@ import GPTMsg from "./GPTMsg";
 
 const { TextArea } = Input;
 
-const confirm = (e) => {
-  console.log(e);
-  message.success("Click on Yes");
-};
-
 const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
   // console.log("Chat : ", roomId);
   const messageEndRef = useRef();
@@ -54,7 +49,8 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     const { data } = await supabase
       .from("chats")
       .select("*")
-      .eq("fk_room_id", roomId);
+      .eq("fk_room_id", roomId)
+      .order("created_at", { ascending: true });
 
     const result = data.map((item) => {
       return {
@@ -155,6 +151,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     // JSON 부분 추출하기
     const jsonStart = text.indexOf("```json");
     const jsonEnd = text.indexOf("```", jsonStart + 6);
+    console.log(text);
 
     if (jsonStart === -1) return { message: text };
 
@@ -171,6 +168,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     let jsonData;
     try {
       jsonData = JSON.parse(jsonString);
+      console.log(jsonData);
     } catch (e) {
       console.error("JSON 파싱 오류:", e);
     }
