@@ -43,6 +43,17 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     setRoomInfo(data[0]);
     setThreadId(data[0].thread_id);
     setState(data[0].state);
+
+    if (data[0].state === 4) {
+      if (data[0].thread_id === "") {
+        const { data } = await supabase
+          .from("rooms")
+          .select("plan")
+          .eq("id", roomId);
+        // console.log("@@", data[0].plan);
+        getAssistantMSG(JSON.stringify(data[0].plan), "", 4);
+      }
+    }
   };
 
   const getChats = async () => {
@@ -145,13 +156,14 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
       .eq("id", roomId)
       .select();
     getAssistantMSG(JSON.stringify(chats), "", 2);
+    // getAssistantMSG(JSON.stringify(chats), "", 2);
   };
 
   const messageFilterFn = (text) => {
     // JSON 부분 추출하기
     const jsonStart = text.indexOf("```json");
     const jsonEnd = text.indexOf("```", jsonStart + 6);
-    console.log(text);
+    // console.log(text);
 
     if (jsonStart === -1) return { message: text };
 
@@ -168,7 +180,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     let jsonData;
     try {
       jsonData = JSON.parse(jsonString);
-      console.log(jsonData);
+      // console.log(jsonData);
     } catch (e) {
       console.error("JSON 파싱 오류:", e);
     }

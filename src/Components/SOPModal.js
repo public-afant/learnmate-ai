@@ -29,7 +29,7 @@ const SOPModal = ({
     setIsLoading(true);
     await supabase
       .from("rooms")
-      .update({ state: 3, plan: { ...json, date: today } })
+      .update({ state: 3, plan: { ...json, date: today }, thread_id: "" })
       .eq("id", roomId)
       .select();
 
