@@ -1,20 +1,16 @@
-import styled from "styled-components";
-import { Button, Input, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { Button, Input, message } from "antd";
 import { useEffect, useState } from "react";
-import Loading from "./Loading";
-import supabase from "../supabase";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import supabase from "../../supabase";
+import Loading from "../../Components/Loading";
 
-const LoginPanner = ({ setIsLogined }) => {
+const Login = () => {
+  const [messageApi, contextHolder] = message.useMessage();
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
-
-  useEffect(() => {
-    if (localStorage.getItem("user") !== null) {
-      setIsLogined(true);
-    }
-  }, []);
+  const navigate = useNavigate();
 
   const errorMessage = () => {
     messageApi.open({
@@ -26,22 +22,12 @@ const LoginPanner = ({ setIsLogined }) => {
   const handleLogin = async () => {
     setIsLoading(true);
     let { data: user, error } = await supabase
-      .from("users")
-      .select("id,name,state")
+      .from("admin")
+      .select("id,name")
       .eq("code", code);
 
     if (user.length > 0) {
-      if (user[0].state === false) {
-        messageApi.open({
-          type: "error",
-          content: "허가된 코드가 아닙니다. 관리자에게 문의해주세요.",
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      setIsLogined(true);
-      localStorage.setItem("user", JSON.stringify(user[0]));
+      localStorage.setItem("admin", JSON.stringify(user[0]));
     } else {
       errorMessage();
     }
@@ -49,14 +35,20 @@ const LoginPanner = ({ setIsLogined }) => {
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("admin")) {
+      navigate("/admin");
+    }
+  });
   return (
     <Body>
       {contextHolder}
 
       <Container>
+        {/* <Title>Admin Login</Title> */}
         <LogoImage src={`${process.env.PUBLIC_URL}/image/Logo1.png`} alt="" />
         <Input.Password
-          placeholder="Authentication Code"
+          placeholder="Insert Admin Code"
           prefix={<UserOutlined />}
           style={{ marginBottom: 10 }}
           onChange={(e) => setCode(e.target.value)}
@@ -72,8 +64,7 @@ const LoginPanner = ({ setIsLogined }) => {
     </Body>
   );
 };
-
-export default LoginPanner;
+export default Login;
 
 const Container = styled.div`
   width: 400px;
@@ -89,9 +80,10 @@ const Container = styled.div`
   border-radius: 10px;
 `;
 
-const LogoImage = styled.img`
-  width: 260px;
-  padding-bottom: 28px;
+const Title = styled.div`
+  padding-bottom: 18px;
+  font-weight: 800;
+  font-size: 20px;
 `;
 
 const Body = styled.div`
@@ -101,4 +93,9 @@ const Body = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const LogoImage = styled.img`
+  width: 260px;
+  padding-bottom: 28px;
 `;

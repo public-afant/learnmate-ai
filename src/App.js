@@ -1,18 +1,48 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginPanner from "./Components/LoginPanner";
 import MainPanner from "./Components/MainPanner";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./Pages/Admin/Login";
+import Admin from "./Pages/Admin/Admin";
 
 function App() {
   const [isLogined, setIsLogined] = useState(false);
-  // const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {}, []);
+
   return (
     <BackGround>
-      {isLogined === false ? (
-        <LoginPanner setIsLogined={setIsLogined} />
-      ) : (
-        <MainPanner setIsLogined={setIsLogined} />
-      )}
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            isLogined ? (
+              <Navigate replace to="/" />
+            ) : (
+              <LoginPanner setIsLogined={setIsLogined} />
+            )
+          }
+        />
+        <Route
+          path="/"
+          element={
+            !isLogined ? (
+              <Navigate replace to="/login" />
+            ) : (
+              <MainPanner setIsLogined={setIsLogined} />
+            )
+          }
+        />
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/login" element={<Login />} />
+
+        {/* {isLogined === false ? (
+          <LoginPanner setIsLogined={setIsLogined} />
+        ) : (
+          <MainPanner setIsLogined={setIsLogined} />
+        )} */}
+      </Routes>
       <Footer>
         <FooterTitle>{"TAEJAE EPT(Education Planning Team)"}</FooterTitle>
       </Footer>

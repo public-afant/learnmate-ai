@@ -1,10 +1,12 @@
 import { Button, Divider } from "antd";
+import { Navigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Layout = ({ children, setIsLogined, setIsNewChat, setSelRoomId }) => {
   const handleLogOut = () => {
     localStorage.removeItem("user");
     setIsLogined(false);
+    // <Navigate to="/login" />;
   };
 
   const user = JSON.parse(localStorage.getItem("user"));

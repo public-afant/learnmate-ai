@@ -4,11 +4,14 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import { ConfigProvider } from "antd";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ConfigProvider theme={{ token: { colorPrimary: "#512D83" } }}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </ConfigProvider>
 );
 

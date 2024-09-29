@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Layout from "./Layout";
 import ListContainer from "./ListContainer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FirstStep from "./FirstStep";
 import Chat from "./Chat";
 
