@@ -19,7 +19,7 @@ const RoomList = ({ selected, activeTab, selName }) => {
 
     setData(list);
 
-    console.log(list);
+    // console.log(list);
     setIsLoading(false);
   };
 

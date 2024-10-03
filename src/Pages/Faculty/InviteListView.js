@@ -35,7 +35,9 @@ const InviteListView = ({ data, onChange }) => {
                           ? item.rooms.plan.project_name
                           : "Untitled"}
                       </div>
-                      <div className="name">{item.users.name}</div>
+                      <div className="name">
+                        {item.users.name} / {item.rooms.title}
+                      </div>
                     </div>
                     <div className="right">
                       {/* <Popconfirm

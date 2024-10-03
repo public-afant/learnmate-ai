@@ -1,6 +1,14 @@
-import { Button, Divider, Input, Spin, message, Popconfirm } from "antd";
+import {
+  Button,
+  Divider,
+  Input,
+  Spin,
+  message,
+  Popconfirm,
+  Popover,
+} from "antd";
 import styled from "styled-components";
-import { SendOutlined } from "@ant-design/icons";
+import { CommentOutlined, SendOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import supabase from "../supabase";
@@ -68,6 +76,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
         message: item.message,
         createdAt: item.created_at,
         role: item.role,
+        comment: item.comment,
       };
     });
 
@@ -196,6 +205,19 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
             return (
               <UserMessage key={index}>
                 <Message className="user">{item.message}</Message>
+                {item.comment !== null && (
+                  <Popover content={item.comment} trigger={"hover"}>
+                    {/* {console.log(item)} */}
+                    <CommentOutlined
+                      style={{
+                        marginLeft: 8,
+                        color: "#512D83",
+                        marginTop: 5,
+                        alignItems: "start",
+                      }}
+                    />
+                  </Popover>
+                )}
               </UserMessage>
             );
           else if (item.role === "assistant")
@@ -209,7 +231,20 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                     setIsNewChat={setIsNewChat}
                     setSelRoomId={setSelRoomId}
                   />
-                </Message>
+                </Message>{" "}
+                {item.comment !== null && (
+                  <Popover content={item.comment} trigger={"hover"}>
+                    {/* {console.log(item)} */}
+                    <CommentOutlined
+                      style={{
+                        marginLeft: 8,
+                        color: "#512D83",
+                        marginTop: 5,
+                        alignItems: "start",
+                      }}
+                    />
+                  </Popover>
+                )}
               </GptMessage>
             );
         })}

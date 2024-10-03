@@ -42,7 +42,9 @@ const RoomListView = ({ data, getRoomList, setRoomId }) => {
                           ? item.rooms.plan.project_name
                           : "Untitled"}
                       </div>
-                      <div className="name">{item.users.name}</div>
+                      <div className="name">
+                        {item.users.name} / {item.rooms.title}
+                      </div>
                     </div>
                     <div className="right">
                       {Object.keys(item.rooms.plan).length > 0 && (
