@@ -22,45 +22,47 @@ const Faculty = () => {
 
   return (
     <Body>
-      <Container>
-        <div className="rooms">
-          <Nav>
-            <Logo src={`${process.env.PUBLIC_URL}/image/Logo3.png`} alt="" />
+      {localStorage.getItem("faculty") && (
+        <Container>
+          <div className="rooms">
+            <Nav>
+              <Logo src={`${process.env.PUBLIC_URL}/image/Logo3.png`} alt="" />
 
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <div style={{ marginRight: 12 }}>
-                Welcome! {JSON.parse(localStorage.getItem("faculty")).name}
-                {" :)"}
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ marginRight: 12 }}>
+                  Welcome! {JSON.parse(localStorage.getItem("faculty")).name}
+                  {" :)"}
+                </div>
+                <Button
+                  type="primary"
+                  style={{ fontSize: 12 }}
+                  size="small"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Button>
               </div>
-              <Button
-                type="primary"
-                style={{ fontSize: 12 }}
-                size="small"
-                onClick={handleLogout}
+            </Nav>
+            <RoomList setRoomId={setRoomId} />
+          </div>
+          <div className="chat">
+            {roomId !== "" ? (
+              <ChatView roomId={roomId} />
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
               >
-                Logout
-              </Button>
-            </div>
-          </Nav>
-          <RoomList setRoomId={setRoomId} />
-        </div>
-        <div className="chat">
-          {roomId !== "" ? (
-            <ChatView roomId={roomId} />
-          ) : (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%",
-              }}
-            >
-              <Empty />
-            </div>
-          )}
-        </div>
-      </Container>
+                <Empty />
+              </div>
+            )}
+          </div>
+        </Container>
+      )}
     </Body>
   );
 };
