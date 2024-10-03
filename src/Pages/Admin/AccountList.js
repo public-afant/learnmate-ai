@@ -101,7 +101,7 @@ const AccountList = ({ setSelected, activeTab, setActiveTab, setSelName }) => {
 
   return (
     <Container>
-      <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+      <Tabs defaultActiveKey="users" items={items} onChange={onChange} />
       <Button
         type="primary"
         style={{

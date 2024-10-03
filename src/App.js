@@ -5,6 +5,8 @@ import MainPanner from "./Components/MainPanner";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Pages/Admin/Login";
 import Admin from "./Pages/Admin/Admin";
+import Faculty from "./Pages/Faculty/Faculty";
+import FacultyLogin from "./Pages/Faculty/FacultyLogin";
 
 function App() {
   const [isLogined, setIsLogined] = useState(false);
@@ -36,6 +38,9 @@ function App() {
         />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/login" element={<Login />} />
+
+        <Route path="/faculty" element={<Faculty />} />
+        <Route path="/faculty/login" element={<FacultyLogin />} />
 
         {/* {isLogined === false ? (
           <LoginPanner setIsLogined={setIsLogined} />
