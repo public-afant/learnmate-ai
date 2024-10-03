@@ -204,13 +204,13 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
           if (item.role === "user")
             return (
               <UserMessage key={index}>
-                <Message className="user">{item.message}</Message>
-                {item.comment !== null && (
+                {item.comment === null ? (
+                  <></>
+                ) : (
                   <Popover content={item.comment} trigger={"hover"}>
-                    {/* {console.log(item)} */}
                     <CommentOutlined
                       style={{
-                        marginLeft: 8,
+                        marginRight: 8,
                         color: "#512D83",
                         marginTop: 5,
                         alignItems: "start",
@@ -218,6 +218,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                     />
                   </Popover>
                 )}
+                <Message className="user">{item.message}</Message>
               </UserMessage>
             );
           else if (item.role === "assistant")
@@ -232,9 +233,10 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                     setSelRoomId={setSelRoomId}
                   />
                 </Message>{" "}
-                {item.comment !== null && (
+                {item.comment === null ? (
+                  <></>
+                ) : (
                   <Popover content={item.comment} trigger={"hover"}>
-                    {/* {console.log(item)} */}
                     <CommentOutlined
                       style={{
                         marginLeft: 8,
