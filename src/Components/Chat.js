@@ -204,7 +204,9 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
           if (item.role === "user")
             return (
               <UserMessage key={index}>
-                {item.comment === null ? (
+                {/* {console.log("@@", item.comment)} */}
+
+                {item.comment === null || item.comment === undefined ? (
                   <></>
                 ) : (
                   <Popover content={item.comment} trigger={"hover"}>
@@ -232,8 +234,8 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                     setIsNewChat={setIsNewChat}
                     setSelRoomId={setSelRoomId}
                   />
-                </Message>{" "}
-                {item.comment === null ? (
+                </Message>
+                {item.comment === null || item.comment === undefined ? (
                   <></>
                 ) : (
                   <Popover content={item.comment} trigger={"hover"}>
