@@ -6,15 +6,23 @@ import {
   message,
   Popconfirm,
   Popover,
+  FloatButton,
+  Modal,
+  Table,
 } from "antd";
 import styled from "styled-components";
-import { CommentOutlined, SendOutlined } from "@ant-design/icons";
+import {
+  CommentOutlined,
+  QuestionCircleOutlined,
+  SendOutlined,
+} from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import supabase from "../supabase";
 // import ReactMarkdown from "react-markdown";
 // import remarkGfm from "remark-gfm";
 import GPTMsg from "./GPTMsg";
+import Prompt from "./Prompt";
 
 const { TextArea } = Input;
 
@@ -27,6 +35,8 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
   const [threadId, setThreadId] = useState("");
   const [state, setState] = useState(1);
   const [roomInfo, setRoomInfo] = useState({});
+
+  const [isModal, setIsModal] = useState(false);
 
   const [planJson, setPlanJson] = useState({});
 
@@ -146,6 +156,16 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
       getAssistantMSG(message, threadId, state);
       setMessage("");
     }
+  };
+
+  const showModal = () => {
+    setIsModal(true);
+  };
+  const handleOk = () => {
+    setIsModal(false);
+  };
+  const handleCancel = () => {
+    setIsModal(false);
   };
 
   const changeInputValueHandler = (e) => {
@@ -290,6 +310,30 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
           </Button>
         </Popconfirm>
       </InputContainer>
+
+      <FloatButton
+        icon={<QuestionCircleOutlined />}
+        type="primary"
+        style={{
+          insetInlineEnd: 100,
+          width: 50,
+          height: 50,
+        }}
+        onClick={() => setIsModal(true)}
+      />
+
+      {/* {isModal && <Prompt />} */}
+
+      <Modal
+        title="Prompt"
+        open={isModal}
+        // onOk={handleOk}
+        onCancel={handleCancel}
+        footer
+        width={800}
+      >
+        <Table dataSource={dataSource} columns={columns} pagination={false} />
+      </Modal>
     </Container>
   );
 };
@@ -372,3 +416,97 @@ let a = {
     },
   ],
 };
+
+const dataSource = [
+  {
+    key: "1",
+    type: "1. Assign a role",
+    examples: `- “You are an expert in the field of [domain/discipline]…”
+- “You are a professor…”`,
+  },
+  {
+    key: "2",
+    type: "2. Integrate the intended audience",
+    examples: `- “The audience is an expert in this field.”
+- “Explain the concept as if you are explaining to someone with zero knowledge…”
+- “Explain as if you are teaching a 5-year-old.”
+- “I want to teach this concept to my [teammate/friend] that is part of the same project.”`,
+  },
+  {
+    key: "3",
+    type: "3. Provide background information",
+    examples: `- “I am currently in charge of a research project for…”
+- “I am a university student that majors in…”
+- “I am a complete beginner in physical sciences…”`,
+  },
+  {
+    key: "4",
+    type: "4. Rewarding system",
+    examples: `- “I will give you a bonus if you provide a better solution.”
+- “I am going to tip $xxx if you…”`,
+  },
+  {
+    key: "5",
+    type: "5. Warning / Punishment",
+    examples: `- “You will be penalized…”
+- “You will get punished if…”`,
+  },
+  {
+    key: "6",
+    type: "6. Get the chatbot to ask questions",
+    examples: `- “From now on, I would like you to ask me questions [to/until]…”
+- “Before you start working, ask me any necessary questions to gather data to construct a better response.”`,
+  },
+  {
+    key: "7",
+    type: "7. Use adjectives/adverbs as keywords",
+    examples: `- “Explain it to me step-by-step…”
+- “[Respond/explain] in a natural, human-like manner…”
+- “Give a detailed explanation…”
+- “Be specific in your [reasoning/answer/response].”
+- “Provide a brief and clear summary…”
+- “Use [simple/basic] language…”`,
+  },
+  {
+    key: "8",
+    type: "8. Use emphasizing keywords",
+    examples: `- “You must do…”
+- “I strongly recommend you to…”
+- “Be very specific when explaining your answer…”
+- “Pay extra attention to your [style/tone/language].”
+- “It is really important that…”`,
+  },
+  {
+    key: "9",
+    type: "9. Use leading words",
+    examples: `- “Think step-by-step…”
+- “Think critically…”
+- “Think out-of-the-box…”
+- “Be [careful/cautious]…”`,
+  },
+  {
+    key: "10",
+    type: "10. Others",
+    examples: `- If you want more concise answers, do not use words such as “please”, “if you don’t mind”, “thank you”, “I would like to…”, etc., and get straight to the point.
+- Use more affirmative directives such as “do,” and try to use less negative language like “don’t.”
+- “I am providing you with the beginning [paragraph/essay/story]: [Insert the paragraph/essay/story] 
+Finish the [paragraph/essay/story] based on the following words provided: “`,
+  },
+];
+
+const columns = [
+  {
+    title: "Prompt Type",
+    dataIndex: "type",
+    key: "type",
+    render: (e) => <div style={{ fontWeight: "bold" }}>{e}</div>,
+  },
+  {
+    title: "Examples",
+    dataIndex: "examples",
+    key: "examples",
+    render: (e) => {
+      return <div style={{ whiteSpace: "pre-line" }}>{e}</div>;
+    },
+  },
+];

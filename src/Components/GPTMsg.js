@@ -20,9 +20,22 @@ const GPTMsg = ({
     // console.log(json);
     setIsModal(true);
   };
+
+  const ConvertFunction = (content) => {
+    content = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+    // ### 제목 변환
+    content = content.replace(/### (.*?)(\n|$)/g, "<h3>$1</h3>");
+    // **굵게** 변환
+    content = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    // *기울임* 변환
+    content = content.replace(/\*(.*?)\*/g, "<em>$1</em>");
+
+    return <div dangerouslySetInnerHTML={{ __html: content }} />;
+  };
   return (
     <>
-      <div>{obj.message}</div>
+      <div>{ConvertFunction(obj.message)}</div>
       {obj.json !== undefined && (
         <>
           <PlanButton
