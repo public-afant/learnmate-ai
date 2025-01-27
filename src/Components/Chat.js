@@ -316,6 +316,8 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
         type="primary"
         style={{
           insetInlineEnd: 100,
+          // top: 100,
+          // right: 150,
           width: 50,
           height: 50,
         }}
