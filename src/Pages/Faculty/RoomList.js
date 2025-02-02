@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Loading from "../../Components/Loading";
-import { Tabs } from "antd";
+import { Badge, Tabs } from "antd";
 import supabase from "../../supabase";
 import RoomListView from "./RoomListView";
 import InviteListView from "./InviteListView";
@@ -64,13 +64,18 @@ const RoomList = ({ roomId, setRoomId }) => {
     },
     {
       key: "invite",
-      label: "Invite",
+      label: (
+        <Badge count={invite.length} offset={[10,0]}>
+
+        Invite
+        </Badge>
+      ),
       children: (
-        <InviteListView
-          data={invite}
-          getInviteList={getInviteList}
-          onChange={onChange}
-        />
+          <InviteListView
+            data={invite}
+            getInviteList={getInviteList}
+            onChange={onChange}
+            />
       ),
     },
   ];

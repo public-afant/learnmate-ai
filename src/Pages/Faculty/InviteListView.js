@@ -4,7 +4,7 @@ import { Button, Empty, List, Popconfirm } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
-const InviteListView = ({ data, onChange }) => {
+const InviteListView = ({ data, onChange, getInviteList }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAcceptInvite = async (id) => {
@@ -15,10 +15,10 @@ const InviteListView = ({ data, onChange }) => {
       .eq("id", id);
 
     onChange("rooms");
+    getInviteList();
     setIsLoading(false);
   };
 
-  const handleDenyInvite = () => {};
   return (
     <Container>
       <div className="listview">
@@ -40,23 +40,6 @@ const InviteListView = ({ data, onChange }) => {
                       </div>
                     </div>
                     <div className="right">
-                      {/* <Popconfirm
-                        title="Deny Invite"
-                        description="Are you sure to deny this invite?"
-                        // onConfirm={() => deleteRoomConfirm(item)}
-                        okText="Deny"
-                        cancelText="Cancel"
-                      >
-                        <div
-                          style={{
-                            fontSize: 10,
-                            cursor: "pointer",
-                            color: "red",
-                          }}
-                        >
-                          Deny
-                        </div>
-                      </Popconfirm> */}
                       <div
                         style={{
                           fontSize: 10,

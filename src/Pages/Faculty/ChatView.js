@@ -73,6 +73,7 @@ const ChatView = ({ roomId }) => {
     console.log("POST");
 
     await supabase.from("chats").update({ comment: comment }).eq("id", msgID);
+    await supabase.from("rooms").update({ noti_state: true }).eq("id", roomId);
 
     getChatList();
     handleCancel();
