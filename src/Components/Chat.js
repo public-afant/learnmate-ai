@@ -14,7 +14,7 @@ import styled from "styled-components";
 import {
   CommentOutlined,
   QuestionCircleOutlined,
-  SendOutlined,
+  SendOutlined,LikeFilled,LikeOutlined
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -77,7 +77,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
   const getChats = async () => {
     const { data } = await supabase
       .from("chats")
-      .select("*")
+      .select("*, comment(id,comment,thumbs_up)")
       .eq("fk_room_id", roomId)
       .order("created_at", { ascending: true });
 
@@ -217,29 +217,57 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     return { message: textOnly, json: jsonData };
   };
 
+  const handleThumbsUp = async (thumbsUp, id) => {
+    await supabase.from("comment").update({ thumbs_up: !thumbsUp }).eq("id",id);
+    getChats();
+  }
+
   return (
     <Container>
       <ChatContainer ref={messageEndRef}>
         {chats.map((item, index) => {
+          // console.log(item);
           if (item.role === "user")
             return (
               <UserMessage key={index}>
                 {/* {console.log("@@", item.comment)} */}
 
-                {item.comment === null || item.comment === undefined ? (
-                  <></>
-                ) : (
-                  <Popover content={item.comment} trigger={"hover"}>
-                    <CommentOutlined
+
+                {item.comment.length !== 0 && (
+                  <>
+                    {item.comment[0].thumbs_up ? <>
+                      <LikeFilled 
+                      onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)}
                       style={{
-                        marginRight: 8,
-                        color: "#512D83",
-                        marginTop: 5,
-                        alignItems: "start",
-                      }}
-                    />
-                  </Popover>
+                            marginRight: 8,
+                            color: "#512D83",
+                            alignItems: "start",
+                            marginTop: 5,
+                          }}/>
+                    </> : <>
+                    <LikeOutlined 
+                    onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)}
+                    style={{
+                      marginRight: 8,
+                      color: "#512D83",
+                      alignItems: "start",
+                      marginTop: 5,
+                    }}/>
+                    </>}
+                    
+                    <Popover content={item.comment[0].comment} trigger={"hover"}>
+                      <CommentOutlined
+                        style={{
+                          marginRight: 8,
+                          color: "#512D83",
+                          marginTop: 5,
+                          alignItems: "start",
+                          }}
+                          />
+                    </Popover>
+                  </>
                 )}
+
                 <Message className="user">{item.message}</Message>
               </UserMessage>
             );
@@ -255,20 +283,47 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                     setSelRoomId={setSelRoomId}
                   />
                 </Message>
-                {item.comment === null || item.comment === undefined ? (
-                  <></>
-                ) : (
-                  <Popover content={item.comment} trigger={"hover"}>
-                    <CommentOutlined
-                      style={{
-                        marginLeft: 8,
-                        color: "#512D83",
-                        marginTop: 5,
-                        alignItems: "start",
-                      }}
-                    />
-                  </Popover>
+
+                {item.comment.length !== 0 && (
+                  <>
+                   
+
+
+                    <Popover content={item.comment[0].comment} trigger={"hover"}>
+                      <CommentOutlined
+                        style={{
+                          marginLeft: 8,
+                          color: "#512D83",
+                          marginTop: 5,
+                          alignItems: "start",
+                          }}
+                          />
+                    </Popover>
+
+                    {item.comment[0].thumbs_up ? <>
+                      <LikeFilled 
+                      onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)} style={{
+                            marginLeft: 8,
+                            color: "#512D83",
+                            alignItems: "start",
+                            marginTop: 5,
+                          }}/>
+                    </> : <>
+                    <LikeOutlined 
+                    onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)}
+                    style={{
+                      marginLeft: 8,
+                      color: "#512D83",
+                      alignItems: "start",
+                      marginTop: 5,
+                    }}/>
+                    </>}
+                    
+                  </>
                 )}
+
+
+            
               </GptMessage>
             );
         })}

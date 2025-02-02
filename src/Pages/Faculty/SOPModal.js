@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import { useRef } from "react";
 
 const SOPModal = ({ setIsModal, json, name }) => {
-  console.log(json);
+  // console.log(json);
   const ref = useRef();
 
   const onCapture = async () => {

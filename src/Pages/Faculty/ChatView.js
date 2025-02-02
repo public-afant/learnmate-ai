@@ -2,8 +2,8 @@ import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import supabase from "../../supabase";
 import GPTMsg from "./GPTMsg";
-import { CommentOutlined, NotificationOutlined } from "@ant-design/icons";
-import { Modal, Input, Popover } from "antd";
+import { CommentOutlined, LikeFilled, LikeOutlined } from "@ant-design/icons";
+import { Modal, Input, Popover,message } from "antd";
 const { TextArea } = Input;
 
 const ChatView = ({ roomId }) => {
@@ -19,7 +19,7 @@ const ChatView = ({ roomId }) => {
 
     const { data, error } = await supabase
       .from("chats")
-      .select("id,role,message,created_at,comment, users(name)")
+      .select("id,role,message,created_at,comment, users(name), comment(id,comment,thumbs_up)")
       .eq("fk_room_id", roomId)
       .order("created_at", { ascending: true });
     // console.log(data);
@@ -72,7 +72,17 @@ const ChatView = ({ roomId }) => {
   const postComment = async () => {
     console.log("POST");
 
-    await supabase.from("chats").update({ comment: comment }).eq("id", msgID);
+    // await supabase.from("chats").update({ comment: comment }).eq("id", msgID);
+
+    const { error } = await supabase
+      .from("comment")
+      .insert({ comment: comment,fk_room_id:roomId, fk_chat_id:msgID });
+
+    error === null && message.success("Successfully.");
+
+    console.log(error)
+
+
     await supabase.from("rooms").update({ noti_state: true }).eq("id", roomId);
 
     getChatList();
@@ -95,17 +105,27 @@ const ChatView = ({ roomId }) => {
             if (role === "user") {
               return (
                 <Chat className="user_1">
-                  {item.comment !== null && (
-                    <Popover content={item.comment} trigger={"hover"}>
-                      <CommentOutlined
-                        style={{
-                          marginRight: 8,
-                          color: "#512D83",
-                          alignItems: "start",
-                          marginTop: 5,
-                        }}
-                      />
-                    </Popover>
+                  {item.comment.length !== 0 && item.comment[0].thumbs_up && (<>
+                    <LikeFilled  style={{
+                            marginRight: 8,
+                            color: "#512D83",
+                            alignItems: "start",
+                            marginTop: 5,
+                          }}/>
+                          </>)}
+                  {item.comment.length !== 0 && (
+                    <>
+                      <Popover content={item.comment[0].comment} trigger={"hover"}>
+                        <CommentOutlined
+                          style={{
+                            marginRight: 8,
+                            color: "#512D83",
+                            alignItems: "start",
+                            marginTop: 5,
+                          }}
+                        />
+                      </Popover>
+                    </>
                   )}
 
                   <Message
@@ -130,18 +150,29 @@ const ChatView = ({ roomId }) => {
                       user={item.users}
                     />
                   </Message>
-                  {item.comment !== null && (
-                    <Popover content={item.comment} trigger={"hover"}>
-                      <CommentOutlined
-                        style={{
-                          marginLeft: 8,
-                          color: "#512D83",
-                          marginTop: 5,
-                          alignItems: "start",
-                        }}
-                      />
-                    </Popover>
+                  
+                  {item.comment.length !== 0 && (
+                    <>
+                      <Popover content={item.comment} trigger={"hover"}>
+                        <CommentOutlined
+                          style={{
+                            marginLeft: 8,
+                            color: "#512D83",
+                            marginTop: 5,
+                            alignItems: "start",
+                          }}
+                        />
+                      </Popover>
+                    </>
                   )}
+                   {item.comment.length !== 0 && item.comment[0].thumbs_up && (<>
+                    <LikeFilled  style={{
+                            marginLeft: 8,
+                            color: "#512D83",
+                            alignItems: "start",
+                            marginTop: 5,
+                          }}/>
+                          </>)}
                 </Chat>
               );
             }
