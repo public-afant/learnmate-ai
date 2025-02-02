@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button, List, message, Tag, Popconfirm } from "antd";
+import { Button, List, message, Tag, Popconfirm, Badge } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import supabase from "../supabase";
 import { useEffect, useState } from "react";
@@ -49,7 +49,15 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
     setIsLoading(false);
   };
 
-  const handleTitle = (item) => {
+  const handleTitle = async (item) => {
+    if(item.noti_state){
+      await supabase
+          .from("rooms")
+          .update({ noti_state: false })
+          .eq("id", item.id)
+          .select();
+    }
+
     setSelRoomId(item.id);
   };
 
@@ -93,6 +101,7 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
         renderItem={(item, index) => {
           return (
             <Item key={index} style={{ height: 50 }}>
+            
               <ItemTitle
                 onClick={() => {
                   if (item.state === 3) {
@@ -105,6 +114,7 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
                   handleTitle(item);
                 }}
               >
+                <Badge dot={item.noti_state} style={{marginRight:10}}></Badge>
                 {item.title}
               </ItemTitle>
               <StateTitle>
