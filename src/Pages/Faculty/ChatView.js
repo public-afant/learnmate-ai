@@ -19,7 +19,7 @@ const ChatView = ({ roomId }) => {
 
     const { data, error } = await supabase
       .from("chats")
-      .select("id,role,message,created_at,comment, users(name), comment(id,comment,thumbs_up)")
+      .select("id,role,message,created_at, users(name), comment(id,comment,thumbs_up)")
       .eq("fk_room_id", roomId)
       .order("created_at", { ascending: true });
     // console.log(data);
