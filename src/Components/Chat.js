@@ -226,14 +226,11 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     <Container>
       <ChatContainer ref={messageEndRef}>
         {chats.map((item, index) => {
-          // console.log(item);
           if (item.role === "user")
             return (
               <UserMessage key={index}>
-                {/* {console.log("@@", item.comment)} */}
 
-
-                {item.comment.length !== 0 && (
+                { typeof item.comment !== "undefined" && item.comment.length !== 0 && (
                   <>
                     {item.comment[0].thumbs_up ? <>
                       <LikeFilled 
@@ -284,11 +281,8 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                   />
                 </Message>
 
-                {item.comment.length !== 0 && (
+                {typeof item.comment !== "undefined" && item.comment.length !== 0 && (
                   <>
-                   
-
-
                     <Popover content={item.comment[0].comment} trigger={"hover"}>
                       <CommentOutlined
                         style={{
@@ -321,9 +315,6 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                     
                   </>
                 )}
-
-
-            
               </GptMessage>
             );
         })}
