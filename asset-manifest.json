@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/learnmate-ai/static/css/main.30764969.css",
-    "main.js": "/learnmate-ai/static/js/main.148ba93d.js",
+    "main.js": "/learnmate-ai/static/js/main.bde2c77e.js",
     "static/js/198.108f2d69.chunk.js": "/learnmate-ai/static/js/198.108f2d69.chunk.js",
     "static/js/213.3007bf69.chunk.js": "/learnmate-ai/static/js/213.3007bf69.chunk.js",
     "static/js/667.9d0d7b64.chunk.js": "/learnmate-ai/static/js/667.9d0d7b64.chunk.js",
     "static/js/453.4333e22d.chunk.js": "/learnmate-ai/static/js/453.4333e22d.chunk.js",
     "index.html": "/learnmate-ai/index.html",
     "main.30764969.css.map": "/learnmate-ai/static/css/main.30764969.css.map",
-    "main.148ba93d.js.map": "/learnmate-ai/static/js/main.148ba93d.js.map",
+    "main.bde2c77e.js.map": "/learnmate-ai/static/js/main.bde2c77e.js.map",
     "198.108f2d69.chunk.js.map": "/learnmate-ai/static/js/198.108f2d69.chunk.js.map",
     "213.3007bf69.chunk.js.map": "/learnmate-ai/static/js/213.3007bf69.chunk.js.map",
     "667.9d0d7b64.chunk.js.map": "/learnmate-ai/static/js/667.9d0d7b64.chunk.js.map",
@@ -16,6 +16,6 @@
   },
   "entrypoints": [
     "static/css/main.30764969.css",
-    "static/js/main.148ba93d.js"
+    "static/js/main.bde2c77e.js"
   ]
 }
