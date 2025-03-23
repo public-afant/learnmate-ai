@@ -60,8 +60,11 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
 
   useEffect(() => {
     messageEndRef.current.scrollTop = messageEndRef.current.scrollHeight;
-    getFacultyList();
   });
+
+  useEffect(() => {
+    getFacultyList();
+  }, []);
 
   const getRoomInfo = async () => {
     const { data } = await supabase
