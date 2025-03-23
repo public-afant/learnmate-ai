@@ -3,7 +3,7 @@ import styled from "styled-components";
 import supabase from "../../supabase";
 import GPTMsg from "./GPTMsg";
 import { CommentOutlined, LikeFilled, LikeOutlined } from "@ant-design/icons";
-import { Modal, Input, Popover,message } from "antd";
+import { Modal, Input, Popover, message } from "antd";
 const { TextArea } = Input;
 
 const ChatView = ({ roomId }) => {
@@ -19,7 +19,9 @@ const ChatView = ({ roomId }) => {
 
     const { data, error } = await supabase
       .from("chats")
-      .select("id,role,message,created_at, users(name), comment(id,comment,thumbs_up)")
+      .select(
+        "id,role,message,created_at, users(name), comment(id,comment,thumbs_up)"
+      )
       .eq("fk_room_id", roomId)
       .order("created_at", { ascending: true });
     // console.log(data);
@@ -76,12 +78,11 @@ const ChatView = ({ roomId }) => {
 
     const { error } = await supabase
       .from("comment")
-      .insert({ comment: comment,fk_room_id:roomId, fk_chat_id:msgID });
+      .insert({ comment: comment, fk_room_id: roomId, fk_chat_id: msgID });
 
     error === null && message.success("Successfully.");
 
-    console.log(error)
-
+    console.log(error);
 
     await supabase.from("rooms").update({ noti_state: true }).eq("id", roomId);
 
@@ -105,17 +106,27 @@ const ChatView = ({ roomId }) => {
             if (role === "user") {
               return (
                 <Chat className="user_1">
-                  {item.comment.length !== 0 && item.comment[0].thumbs_up && (<>
-                    <LikeFilled  style={{
-                            marginRight: 8,
-                            color: "#512D83",
-                            alignItems: "start",
-                            marginTop: 5,
-                          }}/>
-                          </>)}
+                  {item.comment.length !== 0 && item.comment[0].thumbs_up && (
+                    <>
+                      <LikeFilled
+                        style={{
+                          marginRight: 8,
+                          color: "#512D83",
+                          alignItems: "start",
+                          marginTop: 5,
+                        }}
+                      />
+                    </>
+                  )}
                   {item.comment.length !== 0 && (
                     <>
-                      <Popover content={item.comment[0].comment} trigger={"hover"}>
+                      <Popover
+                        content={
+                          // <PopContent>{console.log(item)}</PopContent>
+                          <PopContent>{item.comment[0].comment}</PopContent>
+                        }
+                        trigger={"hover"}
+                      >
                         <CommentOutlined
                           style={{
                             marginRight: 8,
@@ -150,10 +161,15 @@ const ChatView = ({ roomId }) => {
                       user={item.users}
                     />
                   </Message>
-                  
+
                   {item.comment.length !== 0 && (
                     <>
-                      <Popover content={item.comment} trigger={"hover"}>
+                      <Popover
+                        content={
+                          <PopContent>{item.comment[0].comment}</PopContent>
+                        }
+                        trigger={"hover"}
+                      >
                         <CommentOutlined
                           style={{
                             marginLeft: 8,
@@ -165,14 +181,18 @@ const ChatView = ({ roomId }) => {
                       </Popover>
                     </>
                   )}
-                   {item.comment.length !== 0 && item.comment[0].thumbs_up && (<>
-                    <LikeFilled  style={{
-                            marginLeft: 8,
-                            color: "#512D83",
-                            alignItems: "start",
-                            marginTop: 5,
-                          }}/>
-                          </>)}
+                  {item.comment.length !== 0 && item.comment[0].thumbs_up && (
+                    <>
+                      <LikeFilled
+                        style={{
+                          marginLeft: 8,
+                          color: "#512D83",
+                          alignItems: "start",
+                          marginTop: 5,
+                        }}
+                      />
+                    </>
+                  )}
                 </Chat>
               );
             }
@@ -247,8 +267,19 @@ const Message = styled.div`
 const ChatBox = styled.div`
   flex: 1;
   overflow-y: auto;
+  padding-right: 10px;
+  &::-webkit-scrollbar {
+    // display: none;
+  }
+  flex-direction: column;
+`;
+
+const PopContent = styled.div`
+  width: 300px;
+  max-height: 120px;
+  overflow: scroll;
+  word-break: break-word;
   &::-webkit-scrollbar {
     display: none;
   }
-  flex-direction: column;
 `;

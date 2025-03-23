@@ -82,13 +82,13 @@ const Preview = ({ title, subTitle, setIsStart, setRoomId }) => {
         onChange={(e) => setInput(e.target.value)}
       />
 
-      <Select
+      {/* <Select
         placeholder="Select a faculty"
         loading={listLoading}
         style={{ width: 300, marginBottom: 20 }}
         options={list}
         onChange={(e) => setSelectFaculty(e)}
-      />
+      /> */}
 
       <Button className="button" type="primary" block onClick={handleNext}>
         Next

@@ -74,7 +74,7 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
   }, []);
 
   return (
-    <>
+    <Container>
       {contextHolder}
       {isLoading && <Loading />}
       <div
@@ -173,7 +173,7 @@ const ListContainer = ({ setIsNewChat, setSelRoomId }) => {
       {isModal && (
         <SOPModal setIsModal={setIsModal} json={plan} type={"view"} />
       )}
-    </>
+    </Container>
   );
 };
 
@@ -212,3 +212,13 @@ const AddContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+
+
+const Container = styled.div`
+height: 100%;
+overflow: auto;
+
+&::-webkit-scrollbar {
+    display: none;
+  }
+`

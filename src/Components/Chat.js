@@ -9,12 +9,15 @@ import {
   FloatButton,
   Modal,
   Table,
+  Select,
 } from "antd";
 import styled from "styled-components";
 import {
   CommentOutlined,
   QuestionCircleOutlined,
-  SendOutlined,LikeFilled,LikeOutlined
+  SendOutlined,
+  LikeFilled,
+  LikeOutlined,
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -42,6 +45,12 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  const [listLoading, setListLoading] = useState(true);
+
+  const [list, setList] = useState([]);
+
+  const [selectFaculty, setSelectFaculty] = useState("");
+
   useEffect(() => {
     getRoomInfo();
     if (action) {
@@ -51,6 +60,7 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
 
   useEffect(() => {
     messageEndRef.current.scrollTop = messageEndRef.current.scrollHeight;
+    getFacultyList();
   });
 
   const getRoomInfo = async () => {
@@ -158,6 +168,20 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
     }
   };
 
+  const getFacultyList = async () => {
+    const { data, error } = await supabase.from("faculty").select();
+
+    if (data.length > 0) {
+      const arr = [{ value: "", label: "None" }];
+      data.map((item) => {
+        arr.push({ value: item.id, label: item.name });
+      });
+      setList(arr);
+    }
+
+    setListLoading(false);
+  };
+
   const showModal = () => {
     setIsModal(true);
   };
@@ -186,6 +210,16 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
       .select();
     getAssistantMSG(JSON.stringify(chats), "", 2);
     // getAssistantMSG(JSON.stringify(chats), "", 2);
+
+    if (selectFaculty !== "") {
+      await supabase.from("invite").insert([
+        {
+          fk_user_id: user.id,
+          fk_room_id: roomId,
+          fk_faculty_id: selectFaculty,
+        },
+      ]);
+    }
   };
 
   const messageFilterFn = (text) => {
@@ -218,9 +252,12 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
   };
 
   const handleThumbsUp = async (thumbsUp, id) => {
-    await supabase.from("comment").update({ thumbs_up: !thumbsUp }).eq("id",id);
+    await supabase
+      .from("comment")
+      .update({ thumbs_up: !thumbsUp })
+      .eq("id", id);
     getChats();
-  }
+  };
 
   return (
     <Container>
@@ -229,41 +266,63 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
           if (item.role === "user")
             return (
               <UserMessage key={index}>
+                {typeof item.comment !== "undefined" &&
+                  item.comment.length !== 0 && (
+                    <>
+                      {item.comment[0].thumbs_up ? (
+                        <>
+                          <LikeFilled
+                            onClick={() =>
+                              handleThumbsUp(
+                                item.comment[0].thumbs_up,
+                                item.comment[0].id
+                              )
+                            }
+                            style={{
+                              marginRight: 8,
+                              color: "#512D83",
+                              alignItems: "start",
+                              marginTop: 5,
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <LikeOutlined
+                            onClick={() =>
+                              handleThumbsUp(
+                                item.comment[0].thumbs_up,
+                                item.comment[0].id
+                              )
+                            }
+                            style={{
+                              marginRight: 8,
+                              color: "#512D83",
+                              alignItems: "start",
+                              marginTop: 5,
+                            }}
+                          />
+                        </>
+                      )}
 
-                { typeof item.comment !== "undefined" && item.comment.length !== 0 && (
-                  <>
-                    {item.comment[0].thumbs_up ? <>
-                      <LikeFilled 
-                      onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)}
-                      style={{
+                      <Popover
+                        content={
+                          <PopContent>{item.comment[0].comment}</PopContent>
+                        }
+                        trigger={"hover"}
+                        // open={true}
+                      >
+                        <CommentOutlined
+                          style={{
                             marginRight: 8,
                             color: "#512D83",
-                            alignItems: "start",
                             marginTop: 5,
-                          }}/>
-                    </> : <>
-                    <LikeOutlined 
-                    onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)}
-                    style={{
-                      marginRight: 8,
-                      color: "#512D83",
-                      alignItems: "start",
-                      marginTop: 5,
-                    }}/>
-                    </>}
-                    
-                    <Popover content={item.comment[0].comment} trigger={"hover"}>
-                      <CommentOutlined
-                        style={{
-                          marginRight: 8,
-                          color: "#512D83",
-                          marginTop: 5,
-                          alignItems: "start",
+                            alignItems: "start",
                           }}
-                          />
-                    </Popover>
-                  </>
-                )}
+                        />
+                      </Popover>
+                    </>
+                  )}
 
                 <Message className="user">{item.message}</Message>
               </UserMessage>
@@ -281,40 +340,62 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
                   />
                 </Message>
 
-                {typeof item.comment !== "undefined" && item.comment.length !== 0 && (
-                  <>
-                    <Popover content={item.comment[0].comment} trigger={"hover"}>
-                      <CommentOutlined
-                        style={{
-                          marginLeft: 8,
-                          color: "#512D83",
-                          marginTop: 5,
-                          alignItems: "start",
-                          }}
-                          />
-                    </Popover>
-
-                    {item.comment[0].thumbs_up ? <>
-                      <LikeFilled 
-                      onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)} style={{
+                {typeof item.comment !== "undefined" &&
+                  item.comment.length !== 0 && (
+                    <>
+                      <Popover
+                        content={
+                          <PopContent>{item.comment[0].comment}</PopContent>
+                        }
+                        trigger={"hover"}
+                      >
+                        <CommentOutlined
+                          style={{
                             marginLeft: 8,
                             color: "#512D83",
-                            alignItems: "start",
                             marginTop: 5,
-                          }}/>
-                    </> : <>
-                    <LikeOutlined 
-                    onClick={()=> handleThumbsUp(item.comment[0].thumbs_up,item.comment[0].id)}
-                    style={{
-                      marginLeft: 8,
-                      color: "#512D83",
-                      alignItems: "start",
-                      marginTop: 5,
-                    }}/>
-                    </>}
-                    
-                  </>
-                )}
+                            alignItems: "start",
+                          }}
+                        />
+                      </Popover>
+
+                      {item.comment[0].thumbs_up ? (
+                        <>
+                          <LikeFilled
+                            onClick={() =>
+                              handleThumbsUp(
+                                item.comment[0].thumbs_up,
+                                item.comment[0].id
+                              )
+                            }
+                            style={{
+                              marginLeft: 8,
+                              color: "#512D83",
+                              alignItems: "start",
+                              marginTop: 5,
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <LikeOutlined
+                            onClick={() =>
+                              handleThumbsUp(
+                                item.comment[0].thumbs_up,
+                                item.comment[0].id
+                              )
+                            }
+                            style={{
+                              marginLeft: 8,
+                              color: "#512D83",
+                              alignItems: "start",
+                              marginTop: 5,
+                            }}
+                          />
+                        </>
+                      )}
+                    </>
+                  )}
               </GptMessage>
             );
         })}
@@ -346,7 +427,20 @@ const Chat = ({ roomId, action, setIsNewChat, setSelRoomId }) => {
 
         <Popconfirm
           title="Caution"
-          description="Once you proceed, you will not be able to return."
+          // description="Once you proceed, you will not be able to return."
+          description={
+            <>
+              <div>Once you proceed, you will not be able to return.</div>
+              <div> And Select your faculty.</div>
+              <Select
+                placeholder="Select a faculty"
+                style={{ marginTop: 10, width: 300, marginBottom: 20 }}
+                loading={listLoading}
+                options={list}
+                onChange={(e) => setSelectFaculty(e)}
+              />
+            </>
+          }
           onConfirm={handleNextLevel}
           okText="Yes"
           cancelText="Cancle"
@@ -400,9 +494,10 @@ const ChatContainer = styled.div`
   /* margin-bottom: 10px; */
   overflow-y: auto;
   flex-direction: column;
+  padding-right: 10px;
 
   &::-webkit-scrollbar {
-    display: none;
+    // display: none;
   }
 `;
 
@@ -558,3 +653,13 @@ const columns = [
     },
   },
 ];
+
+const PopContent = styled.div`
+  width: 300px;
+  max-height: 120px;
+  overflow: scroll;
+  word-break: break-word;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
